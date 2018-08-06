@@ -139,11 +139,10 @@ def download_videos(response):
         print(video_media)
         if len(video_media) > 0:
             video = json.loads(video_media)
-            video_path = VIDEO_PATH + '/' + article_title +'.mp4'
+            video_path = VIDEO_PATH + article_title +'.mp4'
             m3u8 = video.get('hd').get('url')
-            # cmd = 'ffmpeg -y -i %s -strict -2 %s' % (m3u8, video_path)
             cmd = 'ffmpeg -y -i %s %s' % (m3u8, video_path)
-            os.system(cmd)
+            os.system(cmd.encode('utf-8'))
 
 # 根据专栏 id 获取音频
 def download_audio_by_cid(cid, size):
@@ -165,9 +164,9 @@ def download_json(json_data, file_name):
 def download_one_audio(audio_download_url, article_sharetitle):
     if len(audio_download_url) > 0:
         print(audio_download_url)
-        mp3_path = AUDIO_PATH + '/' + article_sharetitle +'.mp3'
+        mp3_path = AUDIO_PATH + article_sharetitle +'.mp3'
         cmd = "wget -c %s -O %s" % (audio_download_url, mp3_path)
-        os.system(cmd)
+        os.system(cmd.encode('utf-8'))
 
 def download_audio(response):
     json_data = json.loads(response.content.decode('utf-8'))
