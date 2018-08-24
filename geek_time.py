@@ -7,26 +7,18 @@ import regex as re
 import browsercookie
 
 mobile_headers = {
-    'Host': "time.geekbang.org",
-    'X-GEEK-APP-NAME': "time",
-    'X-GEEK-DEVICE-MODEL': "iPhone7,2",
-    'Accept': "*/*",
-    'X-GEEK-OS-VER': "11.3",
-    'Ticket': "AwgBAQQEIBwAAAEEYkEQAAoEDwAAAAUEgMYTAAkBAQsCAwAHBLx.4K8GBF5ck0gCBOq6uFoDBOJ74lo-",
-    'X-GEEK-VER-NAME': "1.1.4",
-    'Device-Id': "3C9553DD-611C-4EBE-B703-109AD179F848",
-    'Device-Token': "c839237dbd40706072532646df282c50ac0b8ebf60cd06fa5e54d70b041b5c77",
+    'Cookie': '----you-cookie---',
     'Accept-Language': "zh-cn",
     'Accept-Encoding': "br, gzip, deflate",
     'Content-Type': "application/json",
-    'Content-Length': "57",
-    'User-Agent': "iPhone7,2(iOS/11.3) GeekbangApp(Zeus/1.1.4) Weex/0.16.1 ExternalUA 750x1334",
+    'Content-Length': "48",
+    'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36",
     'X-GEEK-OS-PLATFORM': "iOS",
     'Referer': "http://www.geekbang.org/",
     'X-GEEK-OS-NAME': "iOS",
     'Connection': "keep-alive",
-    'Cache-Control': "no-cache"
-}
+    'Cache-Control': "no-cache",
+    }
 
 # 专栏
 my_column_url = "https://time.geekbang.org/serv/v1/my/columns"
@@ -61,7 +53,7 @@ make_dir(AUDIO_PATH)
 # 所有专栏
 def fetch_all_column():
     payload = "{}"
-    response = requests.request("POST", all_column_url, data=payload, headers=mobile_headers)
+    response = requests.request("POST", all_column_url, data=payload, cookies=cj, headers=mobile_headers)
     json_data = json.loads(response.content.decode('utf-8'))
 
     print(json_data)
@@ -97,6 +89,7 @@ def column_type_string(column_type):
 # 获取我的专栏
 def fetch_my_column():
     payload = "{}"
+    #response = requests.request("POST", my_column_url, data=payload, cookies=cj, headers=mobile_headers)
     response = requests.request("POST", my_column_url, data=payload, headers=mobile_headers)
     json_data = json.loads(response.content.decode('utf-8'))
 
@@ -147,7 +140,7 @@ def download_videos(response):
 # 根据专栏 id 获取音频
 def download_audio_by_cid(cid, size):
     payload = " {\"cid\":%d,\"size\":%d,\"prev\":%d,\"order\":\"newest\"}" % (cid, size, 0)
-    response = requests.request("POST", audio_url, data=payload, headers=mobile_headers)
+    response = requests.request("POST", audio_url, data=payload, cookies=cj, headers=mobile_headers)
     download_audio(response)
 
 def download_json(json_data, file_name):
@@ -196,7 +189,8 @@ def exec_video():
     cid = int(input("input video column id:\n> "))
     download_video_by_cid(cid, default_size)
 
-print("login 'http://geekbang.org' from chrome first")
+print("login 'https://geekbang.org' from chrome first")
+print("put your Coookie to header: line 10")
 
 if __name__ == "__main__":
     """ 下载音频
